@@ -5,14 +5,11 @@ import NN
 
 
 class N_Class_NN(NN.Newral_Network):
-    # コンストラクトを定義しなければ親のコンストラクタが呼び出される
-
+    # コンストラクタを定義しなければ親のコンストラクタが呼び出される
     def __init__(self, unit):
         print "-------------------------"
         print "N_Class Newral Network"
         super(N_Class_NN,self).__init__(unit)
-
-
 
     # 順伝搬
     def forward(self, _inputs):

@@ -6,31 +6,31 @@ import matplotlib.pyplot as plt
 
 
 class Function(object):
+    # シグモイド関数
     def sigmoid(self, x):
         return 1. / (1 + np.exp(-x))
-
+    # シグモイド関数の微分
     def dsigmoid(self, x):
         return x * (1. - x)
-
+    # 双曲線関数
     def tanh(self, x):
         return np.tanh(x)
-
+    # 双曲線関数の微分
     def dtanh(self, x):
         return 1. - x * x
-
+    # ランプ関数
+    def ReLU(self, x):
+        return x * (x > 0)
+    # ランプ関数の微分
+    def dReLU(self, x):
+        return 1. * (x > 0)
+    # ソフトマックス関数
     def softmax(self, x):
         e = np.exp(x - np.max(x))  # prevent overflow
         if e.ndim == 1:
             return e / np.sum(e, axis=0)
         else:
             return e / np.array([np.sum(e, axis=1)]).T  # ndim = 2
-
-    def ReLU(self, x):
-        return x * (x > 0)
-
-    def dReLU(self, x):
-        return 1. * (x > 0)
-
 
 class Newral_Network(object):
     def __init__(self, unit):
@@ -46,6 +46,7 @@ class Newral_Network(object):
         for i in range(len(self.unit) - 1):
             w = np.random.rand(self.unit[i], self.unit[i + 1])
             self.W.append(w)
+            # 重みの修正量を保持する配列,モメンタムでの計算に使う
             dw = np.random.rand(self.unit[i], self.unit[i + 1])
             self.dW.append(dw)
             b = np.random.rand(self.unit[i + 1])
@@ -89,8 +90,9 @@ class Newral_Network(object):
         for i in range(len(self.W)):
             self.W[i] = self.W[i] - eta * W_grad[i] + M * self.dW[i]
             self.B[i] = self.B[i] - eta * B_grad[i]
+            # モメンタムの計算
             self.dW[i] = -eta * W_grad[i] + M * self.dW[i]
-
+    # 学習
     def train(self, dataset, N, iterations=1000, minibatch=4, eta=0.5, M=0.1):
         print "-----Train-----"
         # 入力データ
@@ -127,8 +129,8 @@ class Newral_Network(object):
             print self.B[i]
             print "\n"
 
+    # 重みの保存
     def save_weight(self, name):
-        # 重みの保存
         import datetime
         today_detail = datetime.datetime.today()
         s = today_detail.strftime("%m-%d-%H-%M")
