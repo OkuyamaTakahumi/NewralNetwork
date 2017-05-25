@@ -22,7 +22,10 @@ class N_Class_NN(NN.Newral_Network):
             else:
                 z = self.F.softmax(u)
             self.Z.append(z)
-        return np.argmax(z, axis=1)
+        if z.ndim == 1:
+            return np.argmax(z)
+        else:  # ndim = 2
+            return np.argmax(z, axis=1)
 
     # 誤差の計算
     def calc_loss(self, label):
